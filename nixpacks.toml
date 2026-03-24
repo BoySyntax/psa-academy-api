@@ -2,4 +2,4 @@
 nixPkgs = ['php', 'phpExtensions.pdo_mysql']
 
 [start]
-cmd = "php -S 0.0.0.0:${PORT:-8080} -t ."
+cmd = "php -S 0.0.0.0:8080 -t ."

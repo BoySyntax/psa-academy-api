@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test File Upload</title>
+</head>
+<body>
+    <h1>Test Material Upload</h1>
+    <form id="uploadForm">
+        <div>
+            <label>File:</label>
+            <input type="file" id="fileInput" required>
+        </div>
+        <div>
+            <label>Lesson ID:</label>
+            <input type="number" id="lessonId" value="1" required>
+        </div>
+        <div>
+            <label>Course ID:</label>
+            <input type="number" id="courseId" value="1" required>
+        </div>
+        <div>
+            <label>Teacher ID:</label>
+            <input type="number" id="teacherId" value="2" required>
+        </div>
+        <div>
+            <label>Material Name:</label>
+            <input type="text" id="materialName" value="Test Material" required>
+        </div>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('file', document.getElementById('fileInput').files[0]);
+            formData.append('lesson_id', document.getElementById('lessonId').value);
+            formData.append('course_id', document.getElementById('courseId').value);
+            formData.append('teacher_id', document.getElementById('teacherId').value);
+            formData.append('material_name', document.getElementById('materialName').value);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Uploading...';
+            
+            try {
+                const response = await fetch('http://localhost/charming_api/teacher/upload-material.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                resultDiv.innerHTML = `
+                    <h3>Response (${response.status}):</h3>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+                if (response.ok) {
+                    resultDiv.style.backgroundColor = '#d4edda';
+                } else {
+                    resultDiv.style.backgroundColor = '#f8d7da';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <pre>${error.message}</pre>
+                `;
+                resultDiv.style.backgroundColor = '#f8d7da';
+            }
+        });
+    </script>
+</body>
+</html>
